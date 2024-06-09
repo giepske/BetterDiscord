@@ -1,6 +1,6 @@
 /**
  * @name InvisibleTyping
- * @version 1.3.3
+ * @version 1.3.4
  * @description Makes your typing invisible to other people.
  * @author Strencher
  * @invite gvA2ree
@@ -101,11 +101,7 @@ Components: {
             if (this.DMChannels.has(channel.type)) return true;
         
             try {
-                return this.defaultProps.PermissionUtils.can({
-                    context: channel,
-                    user: this.defaultProps.UserStore.getCurrentUser(),
-                    permission: /*SEND_MESSAGES*/ 2048n
-                });
+                return this.defaultProps.PermissionUtils.can(this.defaultProps.PermissionConstants.SEND_MESSAGES, channel);
             } catch (error) {
                 console.error("Failed to request permissions:", error);
                 return true;
@@ -417,10 +413,12 @@ module.exports = class InvisibleTyping {
 
         [
             InvisibleTypingButton.defaultProps.PermissionUtils,
+            InvisibleTypingButton.defaultProps.PermissionConstants,
             InvisibleTypingButton.defaultProps.UserStore,
             InvisibleTypingButton.defaultProps.Tooltip
         ] = Webpack.getBulk(
-            {searchExports: true, filter: Webpack.Filters.byProps("can", "areChannelsLocked")},
+            {searchExports: true, filter: Webpack.Filters.byProps("can", "computePermissions")},
+            {searchExports: true, filter: Webpack.Filters.byProps('ADD_REACTIONS')},
             m => m?._dispatchToken && m.getName() === "UserStore",
             {searchExports: true, filter: Webpack.Filters.byPrototypeFields("renderTooltip")}
         );
