@@ -143,7 +143,7 @@ function Start() {
     }
 
     function replaceEmoji(parseResult, emoji) {
-        const emojiUrl = `https://cdn.discordapp.com/emojis/${emoji.id}.webp?size=64&quality=lossless`;
+        const emojiUrl = `https://cdn.discordapp.com/emojis/${emoji.id}.${emoji.animated ? 'gif' : 'webp'}?size=64&quality=lossless`;
         parseResult.content = parseResult.content.replace(`<${emoji.animated ? "a" : ""}:${emoji.originalName || emoji.name}:${emoji.id}>`, emojiUrl);
     }
 
